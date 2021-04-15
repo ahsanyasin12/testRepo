@@ -1,0 +1,15 @@
+{% if results.warning %}
+<div class="col-md-12">
+    <div class="card">
+        <div class="header">
+            <h4 class="title">VBA Stomping</h4>
+            <p class="category">VBA Seismograph output</p>
+        </div>
+        <div class="content">
+            <div class="close-alert alert alert-danger">
+                {{results.output}}
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}

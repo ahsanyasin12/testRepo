@@ -1,0 +1,67 @@
+<div class="col-md-12">
+    <div class="card">
+        <div class="header">
+            <h4 class="title">crt.sh Certificate Search</h4> 
+        </div>
+        <div class="content">
+            <div class="content row">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item">
+                        <a href="#certs" class="nav-link active" data-toggle="tab">Certs</a>
+                    </li>
+
+                    {% if 'host_list' in results %}
+                    <li class="nav-item">
+                        <a href="#hosts" class="nav-link active" data-toggle="tab">Hosts</a>
+                    </li>
+                    {% endif %}
+                </ul>
+
+                <div class="tab-content clearfix">
+                    <div class="tab-pane fade active in" id="certs" role="tabpanel">
+                        <p class="category">Top {{ results['cert_count'] }} Results</p>
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Timestamp</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Issuer</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for cert in results['top_certs'] %}
+                                <tr>
+                                    <td><a href="https://crt.sh/?id={{cert['id']}}">{{ cert['id'] }}</a></td>
+                                    <td>{{ cert['entry_timestamp'] }}</td>
+                                    <td>{{ cert['name_value'] }}</td>
+                                    <td>{{ cert['issuer_name'] }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+    
+                    {% if 'host_list' in results %}
+                    <div class="tab-pane fade" id="hosts" role="tabpanel">
+                        <div class="labeled_content">
+                            <pre><code style="max-height: 800px;">{{ results['host_list'] }}</code></pre>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="content row">
+                {% if 'support_files' in analysis %}
+                    <p class="category">Support Files</p>
+                    {% if name in analysis.support_files %}
+                        {% for support_file in analysis.support_files[name] %}
+                        <a href="{{url_for('AnalysesView:download_support_file', id=analysis._id, module=name, filename=support_file[1])}}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true" target=”_blank” rel=”noopener noreferrer”>{{ support_file[0] }}</a>
+                        {% endfor %}
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>

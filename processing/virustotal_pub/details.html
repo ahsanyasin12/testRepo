@@ -1,0 +1,57 @@
+<div class="col-md-12">
+    <div class="card">
+        <div class="header">
+            <h4 class="title">VirusTotal</h4>
+            <p class="category">Detailed Results</p>
+        </div>
+        <div class="content">
+        {% if results.response_code == 1 %}
+            {% if results.scan_date != '' %}
+            <h5>Scan date</h5>
+            {{results.scan_date}}
+            {% endif %}
+            {% if results.detections != '' %}
+            <h5>Detections</h5>
+            {% if results.detections.startswith('0/') %}
+            <div class="close-alert alert alert-success">
+                {{results.detections}}
+            </div>
+            {% elif results.detections.startswith('1/') %}
+            <div class="close-alert alert alert-warning">
+                {{results.detections}}
+            </div>
+            {% else %}
+            <div class="close-alert alert alert-danger">
+                {{results.detections}}
+            </div>
+            {% endif %}
+            {% endif %}
+            {% if results.scan_details != '' %}
+            <h5>Detection details</h5>
+            {% for item in results.scan_details %}
+                <h6>{{item}}</h6>
+                <div>
+                {% for detail, value in results.scan_details[item].iteritems() %}
+                    {% if detail == 'detected' and value == True %}
+                <div class="close-alert alert alert-danger">
+                {{detail}}: {{value}}
+                </div>
+                    {% else %}
+                {{detail}}: {{value}}
+                    {% endif %}
+                {% endfor %}
+                </div>
+            {% endfor %}
+            {% endif %}
+
+            {% if results.vt != '' %}
+            <h5>VirusTotal permlink</h5>
+            <a href="{{results.vt}}" target=_blank>{{results.vt}}</a>
+            {% endif %}
+        {% else %}
+            <h5>Raw</h5>
+            <pre><code>{{results.Raw}}</code></pre>
+        {% endif %}
+        </div>
+    </div>
+</div>

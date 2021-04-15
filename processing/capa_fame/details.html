@@ -1,0 +1,94 @@
+<div class="col-md-12">
+  <div class="card">
+    <div class="header">
+      <h4 class="title">CAPA - FireEye</h4>
+      <p class="category">Detailed Results</p>
+    </div>
+    <div class="content">
+      <div>
+        <h5><B>Generic Analysis Information</B></h5>
+        <table class='table table-bordered'>
+          <thead>
+            <tr>
+              <th>Key</th>
+              <th>Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for key,value in results['generic'] %}
+            <tr>
+              <th>{{key}}</th>
+              <th>{{value}}</th>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <h5><B>Generic Sample Information</B></h5>
+        <table class='table table-bordered'>
+          <thead>
+            <tr>
+              <th>Key</th>
+              <th>Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for key,value in results['meta'] %}
+            <tr>
+              <th>{{key}}</th>
+              <th>{{value}}</th>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <h5><B>MITRE ATT&CK Information</B></h5>
+        {% if results['attack'] %}
+        <table class='table table-bordered'>
+          <thead>
+            <tr>
+              <th>ATT&CK Tactic</th>
+              <th>ATT&CK Technique</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for key,value in results['attack'] %}
+            <tr>
+              <th>{{key}}</th>
+              <th>{{value}}</th>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <pre class="close-alert alert alert-warning">No Information available</pre>
+        {% endif %}
+      </div>
+      <div>
+        <h5><B>Capability Informationn</B></h5>
+        {% if results['capabilities'] %}
+        <table class='table table-bordered'>
+          <thead>
+            <tr>
+              <th>Capability</th>
+              <th>Namespace</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for key,value in results['capabilities'] %}
+            <tr>
+              <th>{{key}}</th>
+              <th>{{value}}</th>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <pre class="close-alert alert alert-warning">No Information available</pre>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>

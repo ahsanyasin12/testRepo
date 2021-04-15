@@ -1,0 +1,37 @@
+<div class="col-md-12">
+    <div class="card">
+        <div class="header">
+            <h4 class="title">Zipped documents</h4>
+            <p class="category">Detailed hexdump</p>
+        </div>
+        <div class="content">
+            {% for rule_name, matches in results.matches.items() %}
+
+                <div class="typography-line">
+                    <h5 class="collapsed" aria-controls="rule_{{rule_name}}_div" aria-expanded="false" data-target="#rule_{{rule_name}}_div" data-toggle="collapse"
+                    onmouseout="this.style.cssText='cursor: pointer ;color: #000000'"
+                    onmouseover="this.style.cssText='cursor: pointer ;color: #0011FF'" style="cursor: pointer; color: rgb(0, 0, 0);">
+                        {{rule_name}} ({{matches|length}} matches)
+                        <i class="glyphicon glyphicon-chevron-down"></i>
+                    </h5>
+                </div>
+
+                <div id="rule_{{rule_name}}_div" aria-expanded="false" class="collapse" id="rule_compressed_compressed_div" style="height: 0px;">
+                    {% for condition, offset, hexdump in matches %}
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h5>{{condition}} @ {{offset}}</h5>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <pre>{{hexdump}}</pre>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+            {% endfor %}
+        </div>
+    </div>
+</div>

@@ -1,0 +1,86 @@
+<div class="col-md-12">
+    <div class="card">
+        <div class="header">
+            <h4 class="title">静态分析</h4>
+            <p class="category">详细信息</p>
+        </div>
+        <div class="content">
+          <div>
+            <label>导入表</label>
+            <table class='table table-bordered'>
+                <thead>
+                    <tr>
+                        <td>函数</td>
+                        <td>说明</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in results['DIRECTORY_ENTRY_IMPORT'] %}
+
+                            <tr>
+                                <td>{{i}}</td>
+                                <td>{{results['DIRECTORY_ENTRY_IMPORT'][i]}}</td>
+
+                            </tr>
+
+                    {% endfor %}
+                </tbody>
+            </table>
+            <label>导出表</label>
+            <table class='table table-bordered'>
+                <thead>
+                    <tr>
+                        <td>序号</td>
+                        <td>函数</td>
+                        <td>地址</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for exports in results['DIRECTORY_ENTRY_EXPORT'] %}
+
+                            <tr>
+                                <td>{{exports['ordinal']}}</td>
+                                <td>{{exports['name']}}</td>
+                                <td>{{exports['address']}}</td>
+
+                            </tr>
+
+                    {% endfor %}
+                </tbody>
+            </table>
+            <label>证书信息</label>
+            <table class='table table-bordered'>
+                <thead>
+                    <tr>
+                        <td>序列号</td>
+                        <td>名称</td>
+                        <td>国家</td>
+                        <td>地区</td>
+                        <td>组织</td>
+                        <td>邮箱</td>
+                        <td>sha1</td>
+                        <td>md5</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for signature in results['signature'] %}
+
+                            <tr>
+                                <td>{{signature['serial_number']}}</td>
+                                <td>{{signature['common_name']}}</td>
+                                <td>{{signature['country']}}</td>
+                                <td>{{signature['locality']}}</td>
+                                <td>{{signature['organization']}}</td>
+                                <td>{{signature['email']}}</td>
+                                <td>{{signature['sha1']}}</td>
+                                <td>{{signature['md5']}}</td>
+
+                            </tr>
+
+                    {% endfor %}
+                </tbody>
+            </table>
+      </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,367 @@
+<div class="col-md-12">
+  <div class="card">
+    <div class="header">
+      <h4 class="title">pefile - Ero Carrera</h4>
+      <p class="category">Detailed Results</p>
+      <h5><B>Comment</B></h5>
+      <pre><code> Import Hash added: can be found in "Import Symbols" Section</code></pre>
+      <h5><B>Parsing Warnings</B></h5>
+      {% if 'Parsing Warnings' in results %}
+        {% for warning in results['Parsing Warnings'] %}
+          <pre class="close-alert alert alert-warning">{{warning}}</pre>
+        {% endfor %}
+      {% else %}
+        <pre class="close-alert alert alert-success">no warnings during processing</pre>
+      {% endif %}
+
+      <div>
+      <h5><B>DOS_HEADER</B></h5>
+      {% if 'DOS_HEADER' in results %}
+        <h6><B>IMAGE_DOS_HEADER</B></h6>
+        <button class="btn" data-toggle="collapse" data-target="#hidden1">Show/Hide Information</button>
+        <div id="hidden1" class="collapse">
+          <table class='table table-bordered'>
+            <thead>
+              <tr>
+                <th>FileOffset</th>
+                <th>Offset</th>
+                <th>Data Field</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for key, value in results['DOS_HEADER']|dictsort(true, 'value') %}
+            {% if key != 'Structure' %}
+              <tr>
+                <td>{{ "0x%0x" % value['FileOffset'] if value['FileOffset'] is number }}</td>
+                <td>{{ "0x%0x" % value['Offset'] if value['Offset'] is number }}</td>
+                <td>{{ key }}</td>
+                <td>{{ "0x%0x" % value['Value'] if value['Value'] is number }}</td>
+              </tr>
+            {% endif %}
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% endif %}
+      </div>
+
+      <div>
+      <h5><B>NT_HEADERS</B></h5>
+      {% if 'NT_HEADERS' in results %}
+        <h6><B>IMAGE_NT_HEADERS</B></h6>
+        <button class="btn" data-toggle="collapse" data-target="#hidden2">Show/Hide Information</button>
+        <div id="hidden2" class="collapse">
+          <table class='table table-bordered'>
+            <thead>
+              <tr>
+                <th>FileOffset</th>
+                <th>Offset</th>
+                <th>Data Field</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for key, value in results['NT_HEADERS']|dictsort(true, 'value') %}
+            {% if key != 'Structure' %}
+              <tr>
+                <td>{{ "0x%0x" % value['FileOffset'] if value['FileOffset'] is number }}</td>
+                <td>{{ "0x%0x" % value['Offset'] if value['Offset'] is number }}</td>
+                <td>{{ key }}</td>
+                <td>{{ "0x%0x" % value['Value'] if value['Value'] is number }}</td>
+              </tr>
+            {% endif %}
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% endif %}
+      </div>
+
+      <div>
+      <h5><B>FILE_HEADER</B></h5>
+      {% if 'FILE_HEADER' in results %}
+        <h6><B>IMAGE_FILE_HEADER</B></h6>
+        <button class="btn" data-toggle="collapse" data-target="#hidden3">Show/Hide Information</button>
+        <div id="hidden3" class="collapse">
+          <table class='table table-bordered'>
+            <thead>
+              <tr>
+                <th>FileOffset</th>
+                <th>Offset</th>
+                <th>Data Field</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for key, value in results['FILE_HEADER']|dictsort(true, 'value') %}
+            {% if key != 'Structure' %}
+              <tr>
+                <td>{{ "0x%0x" % value['FileOffset'] if value['FileOffset'] is number }}</td>
+                <td>{{ "0x%0x" % value['Offset'] if value['Offset'] is number }}</td>
+                <td>{{ key }}</td>
+                <td>{% if  value['Value'] is number %}{{ "0x%0x" % value['Value'] }} {% else %} {{value['Value']}} {% endif %}</td>
+              </tr>
+            {% endif %}
+            {% endfor %}
+            {% if 'Flags' in results %}
+              <tr>
+                <td>Flags</td>
+                <td colspan="3">{{ results['Flags']|join(', ') }}</td>
+              </tr>
+            {% endif %}
+            </tbody>
+          </table>
+        </div>
+      {% endif %}
+      </div>
+
+      <div>
+      <h5><B>OPTIONAL_HEADER</B></h5>
+      {% if 'OPTIONAL_HEADER' in results %}
+        <h6><B>IMAGE_OPTIONAL_HEADER</B></h6>
+        <button class="btn" data-toggle="collapse" data-target="#hidden4">Show/Hide Information</button>
+        <div id="hidden4" class="collapse">
+          <table class='table table-bordered'>
+            <thead>
+              <tr>
+                <th>FileOffset</th>
+                <th>Offset</th>
+                <th>Data Field</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for key, value in results['OPTIONAL_HEADER']|dictsort(true, 'value') %}
+            {% if key != 'Structure' %}
+              <tr>
+                <td>{{ "0x%0x" % value['FileOffset'] if value['FileOffset'] is number }}</td>
+                <td>{{ "0x%0x" % value['Offset'] if value['Offset'] is number }}</td>
+                <td>{{ key }}</td>
+                <td>{{ "0x%0x" % value['Value'] if value['Value'] is number }}</td>
+              </tr>
+            {% endif %}
+            {% endfor %}
+            {% if 'DllCharacteristics' in results %}
+              <tr>
+                <td>Flags</td>
+                <td colspan="3">{{ results['DllCharacteristics']|join(', ') }}</td>
+              </tr>
+            {% endif %}
+            </tbody>
+
+            </tbody>
+          </table>
+        </div>
+      {% endif %}
+      </div>
+
+      <div>
+      <h5><B>PE Sections</B></h5>
+         {% for items in results['PE Sections'] %}
+         <button class="btn" data-toggle="collapse" data-target="#peloop{{loop.index}}">{{ items['Structure'] }} - {{ items['Name']['Value'].split('\\')[0] }}</button>
+         <div id="peloop{{loop.index}}" class="collapse">
+           <h6><B>{{ items['Structure'] }}</B></h6>
+            <table class='table table-bordered'>
+              <thead>
+                <tr>
+                  <th>FileOffset</th>
+                  <th>Offset</th>
+                  <th>Data Field</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              {% for key, value in items|dictsort(true, 'value') %}
+              {% if (key != 'Structure' and key != 'Flags' and key != 'SHA1' and key != 'SHA256' and key != 'SHA512' and key != 'MD5' and key != 'Entropy') %}
+              <tr>
+                <td>{{ "0x%0x" % value['FileOffset'] if value['FileOffset'] is number }}</td>
+                <td>{{ "0x%0x" % value['Offset'] if value['Offset'] is number }}</td>
+                <td>{{ key }}</td>
+                <td>{% if  value['Value'] is number %}{{ "0x%0x" % value['Value'] }} {% else %} {{ value['Value'].split('\\')[0] }} {% endif %}</td>
+              </tr>
+              {% endif %}
+              {% endfor %}
+              <tr><td>Flags</td><td colspan="3">{{ items['Flags']|join(', ') }}</td></tr>
+              <tr><td>Entropy</td><td colspan="3">{{ items['Entropy'] }} (Min=0.0, Max=8.0)</td></tr>
+              <tr><td>MD5</td><td>hash</td><td colspan="2">{{ items['MD5'] }}</td></tr>
+              <tr><td>SHA-1</td><td>hash</td><td colspan="2">{{ items['SHA1'] }}</td></tr>
+              <tr><td>SHA-256</td><td>hash</td><td colspan="2">{{ items['SHA256'] }}</td></tr>
+              <tr><td>SHA-512</td><td>hash</td><td colspan="2">{{ items['SHA512'] }}</td></tr>
+           </table>
+         </div>
+         {% endfor %}
+      </div>
+
+      <div>
+      <h5><B>Directories</B></h5>
+        <button class="btn" data-toggle="collapse" data-target="#directories">Show/Hide Information</button>
+        <div id="directories" class="collapse">
+        {% for items in results['Directories'] %}
+          <h6><B>{{ items['Structure'] }}</B></h6>
+          <table class='table table-bordered'>
+            <thead>
+              <tr>
+                <th>FileOffset</th>
+                <th>Offset</th>
+                <th>Data Field</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for key, value in items|dictsort(true, 'value') %}
+            {% if key != 'Structure' %}
+              <tr>
+                <td>{{ "0x%0x" % value['FileOffset'] if value['FileOffset'] is number }}</td>
+                <td>{{ "0x%0x" % value['Offset'] if value['Offset'] is number }}</td>
+                <td>{{ key }}</td>
+                <td>{{ "0x%0x" % value['Value'] if value['Value'] is number }}</td>
+              </tr>
+            {% endif %}
+            {% endfor %}
+            </tbody>
+          </table>
+        {% endfor %}
+        </div>
+      </div>
+
+      <div>
+      <h5><B>Version Information</B></h5>
+      <button class="btn" data-toggle="collapse" data-target="#versioninfo">Show/Hide Information</button>
+      <div id="versioninfo" class="collapse">
+      {% for items in results['Version Information'] %}
+        {% for item in items%}
+          <h6><B>{{ item['Structure'] }}</B></h6>
+          <table class='table table-bordered'>
+            <thead>
+              <tr>
+                <th>FileOffset</th>
+                <th>Offset</th>
+                <th>Data Field</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for key, value in item|dictsort(true, 'value') %}
+            {% if key != 'Structure' %}
+              <tr>
+                <td>{{ "0x%0x" % value['FileOffset'] if value['FileOffset'] is number }}</td>
+                <td>{{ "0x%0x" % value['Offset'] if value['Offset'] is number }}</td>
+                <td>{{ key }}</td>
+                <td>{{ "0x%0x" % value['Value'] if value['Value'] is number }}</td>
+              </tr>
+            {% endif %}
+            {% endfor %}
+            </tbody>
+          </table>
+        {% endfor %}
+      {% endfor %}
+      </div>
+      </div>
+
+      <div>
+      <h5><B>Exported Symbols</B></h5>
+      <button class="btn" data-toggle="collapse" data-target="#export">Show/Hide Information</button>
+      <div id="export" class="collapse">
+      {% set items = results['Exported symbols'][0] %}
+        <h6><B>{{ items['Structure'] }}</B></h6>
+        <table class='table table-bordered'>
+          <thead>
+            <tr>
+              <th>FileOffset</th>
+              <th>Offset</th>
+              <th>Data Field</th>
+              <th>Value</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for key, value in items|dictsort(true, 'value') %}
+          {% if (key != 'Structure') %}
+          {{ key }}
+            <tr>
+              <td>{{ "0x%0x" % value['FileOffset'] if value['FileOffset'] is number }}</td>
+              <td>{{ "0x%0x" % value['Offset'] if value['Offset'] is number }}</td>
+              <td>{{ key }}</td>
+              <td>{% if  value['Value'] is number %}{{ "0x%0x" % value['Value'] }} {% else %} {{ value['Value'] }} {% endif %}</td>
+            </tr>
+          {% endif %}
+          {% endfor %}
+          </tbody>
+        </table>
+        <table class='table table-bordered'>
+          <thead>
+            <tr>
+              <th>Ordinal</th>
+              <th>RVA</th>
+              <th>Name</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for items in results['Exported symbols'][1:]|sort(attribute='Ordinal') %}
+            <tr>
+              <td>{{ items['Ordinal'] }}</td>
+              <td>{{ items['RVA'] }}</td>
+              <td>{{ items['Name'] }}</td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      </div>
+
+      <div>
+        <h5><B>Imported symbols</B></h5>
+        <pre class="close-alert alert alert-success">Import Hash: {{ results['Import Hash'] }}</pre>
+        {% for items in results['Imported symbols'] %}
+        {% set counter = loop.index %}
+          {% for item in items%}
+          {% if item['Structure'] %}
+          <button class="btn" data-toggle="collapse" data-target="#imploop{{counter}}">DLL {{ counter }}</button>
+         <div id="imploop{{counter}}" class="collapse">
+            <h6><B>{{ item['Structure'] }}</B></h6>
+            <table class='table table-bordered'>
+              <thead>
+                <tr>
+                  <th>FileOffset</th>
+                  <th>Offset</th>
+                  <th>Data Field</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for key, value in results['FILE_HEADER']|dictsort(true, 'value') %}
+              {% if key != 'Structure' %}
+                <tr>
+                  <td>{{ "0x%0x" % value['FileOffset'] if value['FileOffset'] is number }}</td>
+                  <td>{{ "0x%0x" % value['Offset'] if value['Offset'] is number }}</td>
+                  <td>{{ key }}</td>
+                  <td>{% if  value['Value'] is number %}{{ "0x%0x" % value['Value'] }} {% else %} {{value['Value']}} {% endif %}</td>
+                </tr>
+              {% endif %}
+              {% endfor %}
+              </tbody>
+            </table>
+          {% else %}
+            {% if loop.index == 2 %}
+            <table class='table table-bordered'>
+              <thead>
+                <tr>
+                  <th>DLL</th>
+                  <th>Name</th>
+                  <th>Hint</th>
+                </tr>
+              </thead>
+            {% endif %}
+              <tbody>
+                <th>{{ item['DLL'] }}</th>
+                <th>{{ item['Name'] }}</th>
+                <th>{{ item['Hint'] }}</th>
+              </tbody>
+          {% endif %}
+          {% endfor %}
+            </table>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
