@@ -1,4 +1,5 @@
-# -*- coding: utf-8 -*-
+#!/usr/bin/python
+
 import hashlib
 import numbers
 import os
@@ -8,12 +9,6 @@ import array
 import magic
 import sys
 import math
-
-
-from fame.core.module import ProcessingModule, ModuleInitializationError
-
-reload(sys)
-sys.setdefaultencoding("utf8")
 
 try:
     import pefile
@@ -27,8 +22,14 @@ try:
 except ImportError:
     HAVE_MCRYPTO = False
 
+from fame.core.module import ProcessingModule 
+from fame.common.exceptions import ModuleInitializationError
+#reload(sys)
+#sys.setdefaultencoding("utf8")
+
+
 class PEScanner(ProcessingModule):
-    name = '静态分析'
+    name = "PE file analysis" #'静态分析'
     description = 'PE file extract'
 
     
@@ -232,7 +233,7 @@ class PEScanner(ProcessingModule):
                 ret[-1]["full_name"] = subject.GN
             elif subject.SN:
                 ret[-1]["full_name"] = subject.SN
-        print ret
+        print (ret)
         return ret
     
     def each_with_type(self, target, target_type):
